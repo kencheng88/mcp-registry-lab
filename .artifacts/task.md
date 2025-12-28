@@ -39,7 +39,7 @@
     - [x] Implement Generic Tool Executor
     - [x] Update `McpConfig.java` for Dynamic Registration
     - [x] Comment out Legacy Tool Logic in `BizTools.java`
-- [x] Put `mcp_sidecar_lab` under Git version control
+- [x] Put `mcp-sidecar-lab` under Git version control
     - [x] Create `.gitignore`
     - [x] Initialize Git and make initial commit
     - [x] Push to GitHub repository
@@ -61,12 +61,12 @@
 - [/] Enterprise MCP Vision (Gateway/Registry/RAG) [/]
     - [x] Summarize architecture discussion from Gemini Share
     - [x] Create `design_enterprise_mcp_vision.md` artifact
-    - [x] Rename `mcp_gateway_lab` to `mcp_central_gateway_lab` for archival
-    - [x] Initialize `mcp_registry_lab` project
+    - [x] Rename `mcp-gateway-lab` to `mcp-central-gateway-lab` for archival
+    - [x] Initialize `mcp-registry-lab` project
         - [x] Bootstrap Spring Boot project for Registry
         - [x] Implement K8s Watcher for Sidecar discovery
         - [ ] Add Vector Search (RAG for Tools) skeletal structure
-    - [x] Initialize `mcp_gateway_lab` (Aggregation Mode)
+    - [x] Initialize `mcp-gateway-lab` (Aggregation Mode)
         - [x] Copy `mcp-gateway` from central lab
         - [x] Refactor to consume Registry discovery data
         - [ ] Implement Streaming Proxy logic

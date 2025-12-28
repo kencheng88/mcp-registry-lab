@@ -21,8 +21,8 @@
 ### 代碼結構
 ```text
 /Users/kencheng/Documents/lab/
-├── mcp_registry_lab/          # 控制面：發現與索引
-└── mcp_gateway_lab/           # 數據面：聚合與路由
+├── mcp-registry-lab/          # 控制面：發現與索引
+└── mcp-gateway-lab/           # 數據面：聚合與路由
 ```
 
 ## 3. 下一步預告
