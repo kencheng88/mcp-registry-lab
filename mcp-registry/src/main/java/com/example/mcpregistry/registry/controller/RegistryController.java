@@ -1,5 +1,6 @@
-package com.example.mcpregistry;
+package com.example.mcpregistry.registry.controller;
 
+import com.example.mcpregistry.registry.service.SidecarDiscoveryService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +18,9 @@ public class RegistryController {
     }
 
     @GetMapping("/sidecars")
-    public Map<String, String> listSidecars() {
-        return discoveryService.getDiscoveredSidecars();
+    public Map<String, Object> getSidecars() {
+        return Map.of(
+                "status", "UP",
+                "sidecars", discoveryService.getSidecars());
     }
 }

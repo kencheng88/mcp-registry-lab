@@ -1,5 +1,6 @@
-package com.example.mcpregistry;
+package com.example.mcpregistry.registry.service;
 
+import com.example.mcpregistry.rag.service.ToolEmbeddingService;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class SidecarDiscoveryService {
@@ -23,10 +26,16 @@ public class SidecarDiscoveryService {
     private final Map<String, String> discoveredSidecars = new ConcurrentHashMap<>();
 
     private final KubernetesClient kubernetesClient;
+    private final ToolEmbeddingService embeddingService;
+    private final RestTemplate restTemplate;
     private SharedIndexInformer<Pod> podInformer;
 
-    public SidecarDiscoveryService(KubernetesClient kubernetesClient) {
+    public SidecarDiscoveryService(KubernetesClient kubernetesClient,
+            ToolEmbeddingService embeddingService,
+            RestTemplate restTemplate) {
         this.kubernetesClient = kubernetesClient;
+        this.embeddingService = embeddingService;
+        this.restTemplate = restTemplate;
     }
 
     @PostConstruct
@@ -71,11 +80,32 @@ public class SidecarDiscoveryService {
                 String baseUrl = "http://" + podIp + ":8081";
                 discoveredSidecars.put(podName, baseUrl);
                 log.info("Sidecar {}: {} (IP: {}), 目前總數: {}", action, podName, podIp, discoveredSidecars.size());
+
+                // 非同步抓取工具清單並進行 Embedding
+                fetchAndIndexTools(podName, baseUrl);
             }
         }
     }
 
-    public Map<String, String> getDiscoveredSidecars() {
+    private void fetchAndIndexTools(String podName, String baseUrl) {
+        try {
+            // 假設 Sidecar 有曝露標準的 MCP listTools 或自定義的清單 API
+            // 這裡先模擬呼叫，實務上會透過 MCP Client 讀取
+            log.info("正在從 Sidecar {} 獲取工具清單...", podName);
+            // 這裡暫時用一個模擬的清單或是假設路徑
+            List<Map<String, String>> tools = List.of(
+                    Map.of("name", "calculate", "description", "執行數學運算與邏輯計算"),
+                    Map.of("name", "getBusinessInfo", "description", "獲取企業核心業務資訊與營收數據"));
+
+            for (Map<String, String> tool : tools) {
+                embeddingService.indexTool(podName, tool.get("name"), tool.get("description"));
+            }
+        } catch (Exception e) {
+            log.error("抓取工具清單失敗: {}", e.getMessage());
+        }
+    }
+
+    public Map<String, String> getSidecars() {
         return discoveredSidecars;
     }
 
